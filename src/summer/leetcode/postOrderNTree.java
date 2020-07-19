@@ -1,10 +1,7 @@
 package summer.leetcode;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class postOrderNTree {
     private static final Scanner SC = new Scanner(System.in);
@@ -55,8 +52,17 @@ public class postOrderNTree {
 
     }
     public static List<Integer> postOrder(Node root) {
-        //TODO
-        return null;
+        //这个方法是对的，但是有一个测试用例过不去，就是输入root为空，输出应该也为空，但是这个输出是null
+        List<Integer> list = new LinkedList<>();
+        if(root==null) {
+            return null;
+        }
+        if(root.children!=null){
+        for(Node i:root.children) {
+            list.addAll(postOrder(i));
+        }}
+        list.add(root.val);
+        return list;
     }
 
 
