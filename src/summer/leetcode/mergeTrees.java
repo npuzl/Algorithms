@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+
 public class mergeTrees {
     private static final Scanner SC = new Scanner(System.in);
     /*
@@ -79,9 +80,6 @@ public class mergeTrees {
 
     //解决方法
     public static TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
-
-
-
         if(root1==null){
             return root2;
         }else if(root2==null){
@@ -93,6 +91,7 @@ public class mergeTrees {
 
         return root1;
     }
+
 
     //层次遍历输出
     public static void levelPrint(TreeNode root) {

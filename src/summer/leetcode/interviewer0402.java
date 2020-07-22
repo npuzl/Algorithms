@@ -4,12 +4,11 @@ import java.util.*;
 
 public class interviewer0402 {
     private static final Scanner SC = new Scanner(System.in);
-    
+
     /*
-    sc.next();//不接受空格，在接收到有效数据前，所有的空格或者tab键等输入被忽略，若有有效数据，则遇到这些键退出
-    sc.nextLine();//nextLine()可以接收空格或者tab键，其输入应该以enter键结束。
-    sc.nextInt();
-    sc.nextFloat();
+     * sc.next();//不接受空格，在接收到有效数据前，所有的空格或者tab键等输入被忽略，若有有效数据，则遇到这些键退出
+     * sc.nextLine();//nextLine()可以接收空格或者tab键，其输入应该以enter键结束。 sc.nextInt();
+     * sc.nextFloat();
      */
 
     public static class TreeNode {
@@ -34,12 +33,12 @@ public class interviewer0402 {
     }
 
     public static TreeNode sortedArrayToBST(int[] nums) {
-        if(nums.length==0) {
+        if (nums.length == 0) {
             return null;
         }
-        TreeNode n = new TreeNode(nums[nums.length/2]);
-        n.left = sortedArrayToBST(Arrays.copyOfRange(nums,0,nums.length/2));
-        n.right = sortedArrayToBST(Arrays.copyOfRange(nums,nums.length/2+1,nums.length));
+        TreeNode n = new TreeNode(nums[nums.length / 2]);
+        n.left = sortedArrayToBST(Arrays.copyOfRange(nums, 0, nums.length / 2));
+        n.right = sortedArrayToBST(Arrays.copyOfRange(nums, nums.length / 2 + 1, nums.length));
         return n;
     }
 
@@ -63,8 +62,4 @@ public class interviewer0402 {
 
     }
 
-
 }
-
-
-
