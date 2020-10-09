@@ -19,10 +19,10 @@ public class Perm {
      *  20200915 我还是不太懂这个代码
      */
      public static void perm(int[] list,int k, int m){
-
         if(k==m){
             for(int i=0;i<m;i++){
                 System.out.print(list[i]);
+
             }
             System.out.println();
             count++;
@@ -42,7 +42,7 @@ public class Perm {
         }
     }
     public static void main(String[] args) {
-        int[] list=new int[]{1,2,3,4,5,6};
+        int[] list=new int[]{1,2,3,4,5};
         int k=0,m=list.length;
         perm(list,k,m);
         System.out.println(count);
