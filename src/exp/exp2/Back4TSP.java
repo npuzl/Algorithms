@@ -20,19 +20,29 @@ public class Back4TSP {
     public int[] bestSol;// 当前最优解
     // 如果需要输出最优路线，就是bestSol[1],bestSol[2].....bestSol[n],bestSol[1]
     int n = 0; // 顶点个数
+    int count=0;
+    private int getRouteLength(int[] cs) {
+        int s = 0;
+        for (int i = 1; i < cs.length - 1; i++) {
+            s += matrix[cs[i]][cs[i + 1]];
+        }
+        s += matrix[cs[cs.length - 1]][1];
+        return s;
+    }
 
     private void backtrack(int i) {// i为初始深度
         if (i > n) {
             // 当到底了
-            currentCost = currentCost + matrix[currentSol[n]][currentSol[1]];
+            //currentCost += matrix[currentSol[n]][currentSol[1]];
+            //System.out.println(++count);
+            //System.out.println(Arrays.toString(currentSol)+" \t"+currentCost+"\t "+getRouteLength(currentSol));
             // 需要把最后一个城市回去的路程加上
-            if (currentCost < bestCost) {
-                bestCost = currentCost;
-                bestSol = currentSol;
+            if (getRouteLength(currentSol) < bestCost) {
+                bestCost = getRouteLength(currentSol);
+                bestSol = currentSol.clone();
                 // System.out.println(Arrays.toString(bestSol));
             }
-            currentCost -= matrix[currentSol[n]][currentSol[1]];
-
+            //currentCost -= matrix[currentSol[n]][currentSol[1]];
         } else {
             // 还没到底
             for (int j = i; j <= n; j++) {
@@ -40,10 +50,10 @@ public class Back4TSP {
                 swap(currentSol[i], currentSol[j]);
                 if (check(i)) {
                     // 如果第i个位置可以放
-                    currentCost += matrix[currentSol[i - 1]][currentSol[i]];
+                    //currentCost += matrix[currentSol[i - 1]][currentSol[i]];
                     backtrack(i + 1);
                     // 回溯
-                    currentCost -= matrix[currentSol[i - 1]][currentSol[i]];
+                    //currentCost -= matrix[currentSol[i - 1]][currentSol[i]];
                 }
                 swap(currentSol[j], currentSol[i]);
             }
@@ -76,6 +86,11 @@ public class Back4TSP {
         backtrack(2);// 从第二个位置开始找，第一个位置已经定了，不需要找
     }
 
+    /**
+     * 输出路线
+     *
+     * @return 路线数组
+     */
     public int[] getRoutedSol() {
         int[] route = new int[n + 1];
         if (n >= 0)
@@ -85,6 +100,11 @@ public class Back4TSP {
         return route;
     }
 
+    /**
+     * 获取最短路
+     *
+     * @return 最短路数值
+     */
     public int getShortestLength() {
         return bestCost;
     }

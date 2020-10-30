@@ -4,6 +4,9 @@ import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
+/**
+ * @author zl
+ */
 public class Dijkstra {
 
     public static double[] dijkstra(double[][] matrix, int[][] path, int source) {
@@ -11,8 +14,9 @@ public class Dijkstra {
         HashSet<Integer> unknown = new HashSet<>();
         resource.add(source);
         for (int i = 0; i < matrix.length; i++) {
-            if (i != source)
+            if (i != source) {
                 unknown.add(i);
+            }
         }
         int i=0;
         while (!unknown.isEmpty()){
@@ -44,11 +48,12 @@ public class Dijkstra {
         ArrayList<Integer> paths=new ArrayList<>();
         paths.add(destination);
         while(destination!=resource){
-            for(int []p:path)
+            for(int []p:path) {
                 if (p[1]==destination){
                     paths.add(p[0]);
                     destination=p[0];
                 }
+            }
         }
         for(int i=paths.size()-1;i>=1;i--){
             System.out.print(paths.get(i)+"->");
@@ -58,17 +63,19 @@ public class Dijkstra {
 
     public static double[][] generateMatrix(int n, int[][] locals, int[][] links) {
         double[][] matrix = new double[n][n];
-        for (int i = 0; i < links.length; i++) {
-            matrix[links[i][0]][links[i][1]] = Math.sqrt(Math.pow((locals[links[i][0]][0] - locals[links[i][1]][0]), 2)
-                    + Math.pow((locals[links[i][0]][1] - locals[links[i][1]][1]), 2));
+        for (int[] link : links) {
+            matrix[link[0]][link[1]] = Math.sqrt(Math.pow((locals[link[0]][0] - locals[link[1]][0]), 2)
+                    + Math.pow((locals[link[0]][1] - locals[link[1]][1]), 2));
         }
         //下面这个二层循环会让这个图变成无向图
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == 0)
+                if (matrix[i][j] == 0) {
                     matrix[i][j] = matrix[j][i];
-                if (i != j && matrix[i][j] == 0)
+                }
+                if (i != j && matrix[i][j] == 0) {
                     matrix[i][j] = Double.MAX_VALUE;
+                }
             }
         }
         return matrix;
@@ -96,23 +103,24 @@ public class Dijkstra {
         }
         double[][] matrix = generateMatrix(n, locals, links);
 
-        for (int[] l : locals)
+        for (int[] l : locals) {
             System.out.println(Arrays.toString(l));
-        for (int[] l : links)
+        }
+        for (int[] l : links) {
             System.out.println(Arrays.toString(l));
-        for (double[] m : matrix)
+        }
+        for (double[] m : matrix) {
             System.out.println(Arrays.toString(m));
+        }
 
         int[][] path = new int[n - 1][2];
         System.out.println(Arrays.toString(dijkstra(matrix, path, 0)));
-        for(int i=1;i<n;i++)
+        for(int i=1;i<n;i++) {
             generatePath(path,0,i);
+        }
+        System.out.println(Arrays.deepToString(path));
 
 
-        /*
-        for (int[] p : path)
-            System.out.println(Arrays.toString(p));
-        */
         int num = 4;
         double[][] matrix2 = new double[][]{new double[]{0, 1, 3, Double.MAX_VALUE}, new double[]{1, 0, Double.MAX_VALUE, 2},
                 new double[]{3, Double.MAX_VALUE, 0, 2}, new double[]{Double.MAX_VALUE, 2, 2, 0}
