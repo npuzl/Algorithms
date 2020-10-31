@@ -1,9 +1,7 @@
 package exp.exp2;
 
-import java.time.chrono.HijrahChronology;
 import java.util.*;
 
-import static java.lang.Thread.sleep;
 
 /**
  * 分支限界法求解TSP问题
@@ -11,8 +9,8 @@ import static java.lang.Thread.sleep;
  * 很清晰
  *
  * @author zl
- * @version 1.0
- * @date 2020/10/23
+ * @version 5.0
+ * @date 2020/10/31
  */
 public class BB4TSP {
     //表示没有边
@@ -26,8 +24,12 @@ public class BB4TSP {
 
     Vector<Integer> path = null;
 
-    public Vector<Integer> getPath() {
-        return path;
+    public int [] getPath() {
+        int []routes=new int[path.size()+1];
+        for(int i = 0; i < path.size(); i++)
+            routes[i]=path.get(i);
+        routes[routes.length-1]=path.get(0);
+        return routes;
     }
 
     public void setMinCost(int minCost) {
@@ -125,7 +127,6 @@ public class BB4TSP {
 
         /**
          * 实现堆节点的深度拷贝方法，便于创建新节点
-         *
          * @return 堆节点
          */
         @Override
@@ -174,14 +175,15 @@ public class BB4TSP {
         Vector<Integer> visted = heapNode.visted;//这里面存的是已经确定的节点
         Vector<Integer> unVisted = heapNode.unVisted;//存未确定的节点
         int n = cMatrix.length - 1;//总城市数目
+        int vistedSize = visted.size();
         //下面计算那个求和式子
         int tempSum = 0;
         for (int i = 0; i < level - 1; i++) {
             tempSum += 2 * cMatrix[visted.get(i)][visted.get(i + 1)];
         }
         //如果是最后一个节点，还要加上最后一个节点到头的距离
-        if (heapNode.visted.size() == cMatrix.length - 1) {
-            tempSum += 2 * cMatrix[visted.get(visted.size() - 1)][visted.get(0)];
+        if (vistedSize == n) {
+            tempSum += 2 * cMatrix[visted.get(vistedSize - 1)][visted.get(0)];
         }
 
         //计算中间两项//对于有向图，要考虑从1出发还是回到1，
@@ -193,11 +195,11 @@ public class BB4TSP {
                 tempMin1 = cMatrix[visted.get(0)][j];
             }
             //从别的地方出发回到rk的最小值
-            if (cMatrix[j][visted.get(visted.size() - 1)] != -1 && cMatrix[j][visted.get(visted.size() - 1)] < tempMin2) {
-                tempMin2 = cMatrix[j][visted.get(visted.size() - 1)];
+            if (cMatrix[j][visted.get(vistedSize - 1)] != -1 && cMatrix[j][visted.get(vistedSize - 1)] < tempMin2) {
+                tempMin2 = cMatrix[j][visted.get(vistedSize - 1)];
             }
         }
-        long tempMin=(long)tempMin1+(long)tempMin2;
+        long tempMin = (long) tempMin1 + (long) tempMin2;
         tempMin1 = Integer.MAX_VALUE;
         tempMin2 = Integer.MAX_VALUE;
         for (int j : unVisted) {
@@ -206,27 +208,25 @@ public class BB4TSP {
                 tempMin1 = cMatrix[j][visted.get(0)];
             }
             //从rk出发的最小值
-            if (cMatrix[visted.get(visted.size() - 1)][j] != -1 && cMatrix[visted.get(visted.size() - 1)][j] < tempMin2) {
-                tempMin2 = cMatrix[visted.get(visted.size() - 1)][j];
+            if (cMatrix[visted.get(vistedSize - 1)][j] != -1 && cMatrix[visted.get(vistedSize - 1)][j] < tempMin2) {
+                tempMin2 = cMatrix[visted.get(vistedSize - 1)][j];
             }
         }
         //前提是unvisted非空，如果为空还加，则会有问题
-        //TODO 如果一个是MAX，一个不是MAX会出问题！！！！！！！！
 
         if (unVisted.size() != 0)
-            tempSum += Math.min((long)tempMin1 + (long)tempMin2,tempMin);
+            tempSum += Math.min((long) tempMin1 + (long) tempMin2, tempMin);
 
         //最后那个求和项目
         for (int i : unVisted) {
             //找第i行和第i列最小的元素
             int lineMin = Integer.MAX_VALUE;
-            for (int j = 0; j < cMatrix.length; j++) {
+            for (int j = 0; j <= n; j++) {
                 if (cMatrix[i][j] != -1 && cMatrix[i][j] != 0 && cMatrix[i][j] < lineMin)
                     lineMin = cMatrix[i][j];
             }
             if (lineMin != Integer.MAX_VALUE)
                 tempSum += lineMin;
-
 
             int colMin = Integer.MAX_VALUE;
             for (int[] matrix : cMatrix) {
@@ -256,18 +256,25 @@ public class BB4TSP {
         while (!priorHeap.isEmpty()) {
             HeapNode toExtend = priorHeap.poll();//队列中等待扩展的节点
             for (int i : toExtend.unVisted) {//进行节点拓展
+                //首先判定新节点与已访问的节点有无通路，无的话就不创建新节点
+                if (cMatrix[toExtend.visted.get(toExtend.visted.size() - 1)][i]== -1)
+                    continue;
                 HeapNode node = (HeapNode) toExtend.clone();//先根据父节点复制一个，深拷贝
                 node.addVisted(i);//复制的节点增加已访问的城市
                 node.level++;//新的节点层数加1
                 node.lcost = computeLB(node, node.level, cMatrix);//新的节点下界换一下
-                //如果新加的和父节点之间是有通路的
-                if (cMatrix[toExtend.visted.get(toExtend.visted.size() - 1)][i] != -1)
+
+                int vistedSize = node.visted.size();
+                //如果到了叶节点且与首节点有通路 或者未到叶节点
+                if (vistedSize < n || (vistedSize == n && cMatrix[i][1] != -1)) {
                     priorHeap.add(node);//加入队列
-                // 如果新扩展的子节点到达了叶节点
-                if (toExtend.level + 1 == n && node.lcost < minCost) {
-                    minCost = node.lcost;
-                    path = node.visted;
+                    // 如果新扩展的子节点到达了叶节点
+                    if (toExtend.level + 1 == n && node.lcost < minCost) {
+                        minCost = node.lcost;
+                        path = node.visted;
+                    }
                 }
+
             }
             //接下来进行剪枝//删除lcost大于minCost的节点
             priorHeap.removeIf(h -> h.lcost > minCost);

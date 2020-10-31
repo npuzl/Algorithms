@@ -1,13 +1,11 @@
 package exp.exp2;
 
-import java.util.Arrays;
-
 /**
  * 回溯法求解TSP问题 排列树问题
  *
  * @author zl
- * @version 1.0
- * @date 2020/10/23
+ * @version 5.0
+ * @date 2020/10/31
  */
 public class Back4TSP {
 
@@ -20,7 +18,8 @@ public class Back4TSP {
     public int[] bestSol;// 当前最优解
     // 如果需要输出最优路线，就是bestSol[1],bestSol[2].....bestSol[n],bestSol[1]
     int n = 0; // 顶点个数
-    int count=0;
+    int count = 0;
+
     private int getRouteLength(int[] cs) {
         int s = 0;
         for (int i = 1; i < cs.length - 1; i++) {
@@ -33,29 +32,33 @@ public class Back4TSP {
     private void backtrack(int i) {// i为初始深度
         if (i > n) {
             // 当到底了
-            //currentCost += matrix[currentSol[n]][currentSol[1]];
-            //System.out.println(++count);
-            //System.out.println(Arrays.toString(currentSol)+" \t"+currentCost+"\t "+getRouteLength(currentSol));
-            // 需要把最后一个城市回去的路程加上
-            if (getRouteLength(currentSol) < bestCost) {
-                bestCost = getRouteLength(currentSol);
-                bestSol = currentSol.clone();
-                // System.out.println(Arrays.toString(bestSol));
-            }
-            //currentCost -= matrix[currentSol[n]][currentSol[1]];
+            bestCost = currentCost;
+            bestSol = currentSol.clone();
         } else {
             // 还没到底
             for (int j = i; j <= n; j++) {
                 // 第i个位置可能是i，i+1,i+2，....，n
-                swap(currentSol[i], currentSol[j]);
-                if (check(i)) {
+
+                if (check(i,j)) {
+                    swap(i, j);
                     // 如果第i个位置可以放
-                    //currentCost += matrix[currentSol[i - 1]][currentSol[i]];
-                    backtrack(i + 1);
-                    // 回溯
-                    //currentCost -= matrix[currentSol[i - 1]][currentSol[i]];
+                    if (i < n && currentCost + matrix[currentSol[i - 1]][currentSol[i]] < bestCost) {
+                        currentCost += matrix[currentSol[i - 1]][currentSol[i]];
+                        backtrack(i + 1);
+                        // 回溯
+                        currentCost -= matrix[currentSol[i - 1]][currentSol[i]];
+                    }
+                    if (i == n && currentCost + matrix[currentSol[i - 1]][currentSol[i]]
+                            + matrix[currentSol[i]][currentSol[1]] < bestCost) {
+                        currentCost += matrix[currentSol[i - 1]][currentSol[i]]
+                                + matrix[currentSol[i]][currentSol[1]];
+                        backtrack(i + 1);
+                        currentCost -= matrix[currentSol[i - 1]][currentSol[i]]
+                                + matrix[currentSol[i]][currentSol[1]];
+                    }
+                    swap(j, i);
                 }
-                swap(currentSol[j], currentSol[i]);
+
             }
         }
 
@@ -67,9 +70,15 @@ public class Back4TSP {
         currentSol[j] = temp;
     }
 
-    public boolean check(int pos) {
-        // 如果第pos-1个位置到第pos个位置有路，则返回true
-        return matrix[currentSol[pos - 1]][currentSol[pos]] != NoEdge;
+    public boolean check(int i,int j) {
+        if (i < currentSol.length - 1)
+            // 如果第pos-1个位置到第pos个位置有路，则返回true
+            return matrix[currentSol[i - 1]][currentSol[j]] != NoEdge;
+        if (i == currentSol.length - 1) {
+            return matrix[currentSol[i - 1]][currentSol[i]] != NoEdge
+                    && matrix[currentSol[i]][currentSol[1]] != NoEdge;
+        }
+        return false;
     }
 
     /**
@@ -96,7 +105,7 @@ public class Back4TSP {
         if (n >= 0)
             System.arraycopy(bestSol, 1, route, 0, n);
         route[n] = bestSol[1];
-        System.out.println(Arrays.toString(route));
+        //System.out.println(Arrays.toString(route));
         return route;
     }
 
