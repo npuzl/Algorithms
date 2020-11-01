@@ -1,14 +1,18 @@
 package Homework.homework1;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
  * @author zl
  */
 public class Dijkstra {
-
+    /**
+     * 迪杰斯特拉算法求解最短路
+     * @param matrix 初始矩阵
+     * @param path 得到的路线
+     * @param source 源点
+     * @return 距离矩阵
+     */
     public static double[] dijkstra(double[][] matrix, int[][] path, int source) {
         HashSet<Integer> resource = new HashSet<>();
         HashSet<Integer> unknown = new HashSet<>();
