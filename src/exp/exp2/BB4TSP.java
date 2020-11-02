@@ -17,6 +17,7 @@ public class BB4TSP {
     int noEdge = -1;
     //当前最小代价
     private int minCost = Integer.MAX_VALUE;
+    private int maxCost = 0;
 
     public int getMinCost() {
         return minCost;
@@ -24,11 +25,11 @@ public class BB4TSP {
 
     Vector<Integer> path = null;
 
-    public int [] getPath() {
-        int []routes=new int[path.size()+1];
-        for(int i = 0; i < path.size(); i++)
-            routes[i]=path.get(i);
-        routes[routes.length-1]=path.get(0);
+    public int[] getPath() {
+        int[] routes = new int[path.size() + 1];
+        for (int i = 0; i < path.size(); i++)
+            routes[i] = path.get(i);
+        routes[routes.length - 1] = path.get(0);
         return routes;
     }
 
@@ -40,11 +41,11 @@ public class BB4TSP {
      * 获取上界，上界是用贪心求得
      * TODO 这个函数有问题哈，其实这个也没啥用
      * 问题在于，如果最后一个节点回不去呢
+     * 如果最后一个节点回不去，就回溯，找次小的节点，唉，这样还挺烦的
      *
      * @param matrix 邻接矩阵
-     * @return 上界
      */
-    public int getMax(int[][] matrix) {
+    public void getMax(int[][] matrix) {
         //已经访问的城市
         ArrayList<Integer> visted = new ArrayList<Integer>();
         //接下来要访问的城市
@@ -56,6 +57,7 @@ public class BB4TSP {
             int c = current.get(0), tempMin = Integer.MAX_VALUE;
             current.remove(0);
             visted.add(c);
+
             //存储一行里面最小城市
             int minCity = -1;
 
@@ -69,13 +71,56 @@ public class BB4TSP {
             if (minCity != -1) {
                 sum += tempMin;
                 current.add(minCity);
+            } else {
+                //当贪心到一半无法形成回路
+                maxCost = Integer.MAX_VALUE;
+                return;
             }
         }
-        sum += matrix[visted.get(visted.size() - 1)][1];
+        if (matrix[visted.get(visted.size() - 1)][1] == -1) {
+            maxCost = Integer.MAX_VALUE;
+            return;
+        }
+        maxCost += sum + matrix[visted.get(visted.size() - 1)][1];
 
-        return sum;
     }
 
+    /**
+     * 真正的上界应该用回溯法+贪心来做，
+     * 比较麻烦，有时间再写，先用上面的不完备的上界
+     *
+     * @param matrix
+     * @param tempPath
+     * @param deepth
+     * @param tempLength
+     */
+    public void getMax(int[][] matrix, int[] tempPath, int deepth, int tempLength) {
+
+        if (deepth > matrix.length - 1) {
+            maxCost = tempLength;
+        } else {
+            for (int j = deepth; j <= matrix.length - 1; j++) {
+                /*
+                if(){
+                    swap(deepth,j,tempPath);
+                    if(...){
+                        ...
+
+                    }
+                    swap(deepth,j,tempPath);
+
+
+                }
+*/
+            }
+        }
+    }
+
+    private void swap(int i, int j, int[] arr) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
 
     Comparator<HeapNode> cmp = new Comparator<HeapNode>() {
         @Override
@@ -127,6 +172,7 @@ public class BB4TSP {
 
         /**
          * 实现堆节点的深度拷贝方法，便于创建新节点
+         *
          * @return 堆节点
          */
         @Override
@@ -246,6 +292,17 @@ public class BB4TSP {
      * @param n       城市个数.
      */
     public void bb4TSP(int[][] cMatrix, int n) {
+        /*
+        int []tempPath=new int[n];
+        for (int i = 0; i < n; i++) {
+            tempPath[i]=i;
+        }
+        //先获取上界//这一部分代码有问题，先不用了
+        getMax(cMatrix,tempPath,2,Integer.MAX_VALUE);
+        */
+        //上界为 maxCost
+
+        getMax(cMatrix);
         //0-level的城市是已经排好的
         int level = 1;
         HeapNode heapNode = new HeapNode(0, level, n);
@@ -257,13 +314,15 @@ public class BB4TSP {
             HeapNode toExtend = priorHeap.poll();//队列中等待扩展的节点
             for (int i : toExtend.unVisted) {//进行节点拓展
                 //首先判定新节点与已访问的节点有无通路，无的话就不创建新节点
-                if (cMatrix[toExtend.visted.get(toExtend.visted.size() - 1)][i]== -1)
+                if (cMatrix[toExtend.visted.get(toExtend.visted.size() - 1)][i] == -1)
                     continue;
                 HeapNode node = (HeapNode) toExtend.clone();//先根据父节点复制一个，深拷贝
                 node.addVisted(i);//复制的节点增加已访问的城市
                 node.level++;//新的节点层数加1
                 node.lcost = computeLB(node, node.level, cMatrix);//新的节点下界换一下
-
+                //如果大于上界，直接不考虑了
+                if(node.lcost>maxCost)
+                    continue;
                 int vistedSize = node.visted.size();
                 //如果到了叶节点且与首节点有通路 或者未到叶节点
                 if (vistedSize < n || (vistedSize == n && cMatrix[i][1] != -1)) {
