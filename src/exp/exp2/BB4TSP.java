@@ -231,7 +231,7 @@ public class BB4TSP {
         if (vistedSize == n) {
             tempSum += 2 * cMatrix[visted.get(vistedSize - 1)][visted.get(0)];
         }
-
+        //Update 2020/11/06 下面这个计算从r1出发不需要算了，只要考虑从某个点回到r1
         //计算中间两项//对于有向图，要考虑从1出发还是回到1，
         int tempMin1 = Integer.MAX_VALUE;
         int tempMin2 = Integer.MAX_VALUE;

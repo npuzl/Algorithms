@@ -22,7 +22,7 @@ public class Dijkstra {
                 unknown.add(i);
             }
         }
-        int i=0;
+        int i = 0;
         while (!unknown.isEmpty()){
             double min = Double.MAX_VALUE;
             int from = 0;
