@@ -16,12 +16,8 @@ public class kthSelect {
         while (left < right){
             int mid=(left + right)/2;
             if(k>(mid-left+1)){ //3 4大
-
-
                 left=mid;
-
             }else {
-
                 right=mid;
             }
 

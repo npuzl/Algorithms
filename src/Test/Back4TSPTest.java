@@ -12,7 +12,7 @@ public class Back4TSPTest {
 
     @Test
     public void testBacktrack4TSP() {
-        int n =19;
+        int n =13;
         int[][] matrix = generateLoads(n);
         System.out.println("邻接矩阵为：");
         for (int[] m : matrix)
@@ -30,11 +30,10 @@ public class Back4TSPTest {
 
         //Assert.assertEquals(34, back4TSP.bestc);
 
-        //makeCompare(5);
+        makeCompare(10);
         //makeCompare(15);
         //compare();
     }
-
     public void makeCompare(int k) {
         int[][] matrix = generateLoads(k);
         //System.out.println("邻接矩阵为：");
