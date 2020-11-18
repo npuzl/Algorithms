@@ -108,8 +108,6 @@ public class BB4TSP {
 
                     }
                     swap(deepth,j,tempPath);
-
-
                 }
 */
             }

@@ -11,7 +11,7 @@ import java.util.Random;
 public class Back4TSPTest {
 
     @Test
-    public void testBacktrack4TSP() {
+    public void testBacktrack4TSP() {/*
         int n =13;
         int[][] matrix = generateLoads(n);
         System.out.println("邻接矩阵为：");
@@ -27,18 +27,18 @@ public class Back4TSPTest {
         System.out.println("当城市数为" +n + "时");
         System.out.println("回溯法运行时间为" + run1 + "ms" + " 运行结果为:" + back4TSP.getShortestLength()
                         + "\n路线为" + Arrays.toString(back4TSP.getRoutedSol()));
-
+*/
         //Assert.assertEquals(34, back4TSP.bestc);
 
-        makeCompare(10);
+        makeCompare(15);
         //makeCompare(15);
         //compare();
     }
     public void makeCompare(int k) {
         int[][] matrix = generateLoads(k);
-        //System.out.println("邻接矩阵为：");
-       // for (int[] m : matrix)
-        //    System.out.println(Arrays.toString(m));
+        System.out.println("邻接矩阵为：");
+        for (int[] m : matrix)
+            System.out.println(Arrays.toString(m));
 
         long start1 = System.currentTimeMillis();
         Back4TSP back4TSP = new Back4TSP();

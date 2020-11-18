@@ -39,7 +39,7 @@ public class Back4TSP {
             for (int j = i; j <= n; j++) {
                 // 第i个位置可能是i，i+1,i+2，....，n
 
-                if (check(i,j)) {
+                if (check(i, j)) {
                     swap(i, j);
                     // 如果第i个位置可以放
                     if (i < n && currentCost + matrix[currentSol[i - 1]][currentSol[i]] < bestCost) {
@@ -70,7 +70,7 @@ public class Back4TSP {
         currentSol[j] = temp;
     }
 
-    public boolean check(int i,int j) {
+    public boolean check(int i, int j) {
         if (i < currentSol.length - 1)
             // 如果第pos-1个位置到第pos个位置有路，则返回true
             return matrix[currentSol[i - 1]][currentSol[j]] != NoEdge;

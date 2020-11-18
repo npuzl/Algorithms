@@ -27,7 +27,7 @@ public class GATest {
 
     @Test
     public void compareBack4AndGA() {
-        int cityNum = 15;
+        int cityNum = 10;
         int popNum = 100;
         int[] code = new int[cityNum];
         for (int i = 0; i < cityNum; i++) {
