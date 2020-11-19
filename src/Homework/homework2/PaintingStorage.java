@@ -3,6 +3,10 @@ package Homework.homework2;
 import java.util.Arrays;
 
 /**
+ * 本作业在github上管理，做题记录都在github上，
+ * github地址：https://github.com/npuzl/Algorithms
+ * 老师如果打开链接了的话麻烦点个star呗
+ *
  * 最简单的方法，就是建立一棵深度为m*n的子集树，每个节点只有0，1两种选择，这样复杂度感觉挺大的
  * 这是最简单也最蠢的方法，这个复杂度是O(2^(m+n))，而且在check部分，我check了每一个点处的值
  * 但是这个可以求出来

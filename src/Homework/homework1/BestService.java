@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 public class BestService {
     /**
+     * 本作业在github上管理，做题记录都在github上，
+     * github地址：https://github.com/npuzl/Algorithms
+     * 老师如果打开链接了的话麻烦点个star呗
      * 计算多处最优服务次序的最小平均等待时间
      * 最终时间复杂度为O(nlgn)
      * @param n           任务数目

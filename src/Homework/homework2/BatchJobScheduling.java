@@ -3,6 +3,10 @@ package Homework.homework2;
 import java.util.Arrays;
 
 /**
+ * 本作业在github上管理，做题记录都在github上，
+ * github地址：https://github.com/npuzl/Algorithms
+ * 老师如果打开链接了的话麻烦点个star呗
+ *
  * 这是一个排列树
  * 这道题的问题不在于check上，而在于更新当前时间上，要注意更新的是个啥
  */
