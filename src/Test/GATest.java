@@ -27,7 +27,7 @@ public class GATest {
 
     @Test
     public void compareBack4AndGA() {
-        int cityNum = 10;
+        int cityNum = 14;
         int popNum = 100;
         int[] code = new int[cityNum];
         for (int i = 0; i < cityNum; i++) {
@@ -41,7 +41,7 @@ public class GATest {
         GAOperations ga = new GAOperations(popNum, matrixGA, code);
 
 
-        ga.getBestSol(5000);
+        ga.getBestSol(10000);
 
 
         Back4TSP back4TSP = new Back4TSP();
