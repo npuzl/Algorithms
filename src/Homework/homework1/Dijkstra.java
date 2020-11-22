@@ -10,6 +10,7 @@ public class Dijkstra {
      * 本作业在github上管理，做题记录都在github上，
      * github地址：https://github.com/npuzl/Algorithms
      * 老师如果打开链接了的话麻烦点个star呗
+     * 如果有错误，可以提Issues，谢谢！
      * 迪杰斯特拉算法求解最短路
      * @param matrix 初始矩阵
      * @param path 得到的路线

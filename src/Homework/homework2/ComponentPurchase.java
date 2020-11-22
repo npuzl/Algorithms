@@ -6,7 +6,7 @@ import java.util.Arrays;
  * 本作业在github上管理，做题记录都在github上，
  * github地址：https://github.com/npuzl/Algorithms
  * 老师如果打开链接了的话麻烦点个star呗
- *
+ * 如果有错误，可以提Issues，谢谢！
  * 这道题是排列树，每个节点有m个选择
  * 如果没有 “每个厂商处只能购买一个”，这道题就是子集树
  *

@@ -139,7 +139,7 @@ public class BB4TSP {
         int lcost; //子树费用的下界//优先级//就是lb//那个computeLB的lb
         int level;//0-level的城市是已经排好的//其实这也是第几层
         Vector<Integer> visted = new Vector<Integer>();
-        Vector<Integer> unVisted = new Vector<Integer>();
+        HashSet<Integer> unVisted = new HashSet<Integer>();
 
         /**
          * @param lc  当前节点的下界
@@ -161,11 +161,7 @@ public class BB4TSP {
          */
         public void addVisted(int a) {
             visted.add(a);
-            for (int i = 0; i < unVisted.size(); i++) {
-                if (unVisted.get(i) == a) {
-                    unVisted.remove(i);
-                }
-            }
+            unVisted.remove(a);
         }
 
         /**
@@ -182,7 +178,7 @@ public class BB4TSP {
                 e.printStackTrace();
             }
             assert heapNode != null;
-            heapNode.unVisted = (Vector<Integer>) unVisted.clone();
+            heapNode.unVisted = (HashSet<Integer>) unVisted.clone();
             heapNode.visted = (Vector<Integer>) visted.clone();
             // heapNode.priorNode= (Vector<Integer>) priorNode.clone();
             return heapNode;
@@ -217,7 +213,7 @@ public class BB4TSP {
      */
     public int computeLB(HeapNode heapNode, int level, int[][] cMatrix) {
         Vector<Integer> visted = heapNode.visted;//这里面存的是已经确定的节点
-        Vector<Integer> unVisted = heapNode.unVisted;//存未确定的节点
+        HashSet<Integer> unVisted = heapNode.unVisted;//存未确定的节点
         int n = cMatrix.length - 1;//总城市数目
         int vistedSize = visted.size();
         //下面计算那个求和式子
@@ -319,7 +315,7 @@ public class BB4TSP {
                 node.level++;//新的节点层数加1
                 node.lcost = computeLB(node, node.level, cMatrix);//新的节点下界换一下
                 //如果大于上界，直接不考虑了
-                if(node.lcost>maxCost)
+                if (node.lcost > maxCost)
                     continue;
                 int vistedSize = node.visted.size();
                 //如果到了叶节点且与首节点有通路 或者未到叶节点
