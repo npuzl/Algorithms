@@ -10,15 +10,17 @@ public class testBB4TSP {
 
     @Test
     public void testbb4TSP() {
-        int n = 2;
+        int n = 15;
         int[][] matrix = Back4TSPTest.generateLoads(n);
         System.out.println("邻接矩阵为：");
         for (int[] m : matrix)
             System.out.println(Arrays.toString(m));
 
         long start2 = System.currentTimeMillis();
+
         BB4TSP bB4TSP = new BB4TSP();
         bB4TSP.bb4TSP(matrix, n);
+
         long end2 = System.currentTimeMillis();
         long run2 = end2 - start2;
         System.out.println("当城市数为" + n + "时");
@@ -44,7 +46,7 @@ public class testBB4TSP {
                 {-1, 5, 7, 4, -1, 3},
                 {-1, 8, 9, 2, 3, -1}
 
-        };*/
+        };*//*
         int[][] a =
                 {{-1, -1, -1, -1, -1},
                 {-1, -1, 9, 19, 13},
@@ -54,7 +56,7 @@ public class testBB4TSP {
         BB4TSP bb4TSP = new BB4TSP();
         bb4TSP.bb4TSP(a, 4);
         System.out.println(bb4TSP.getMinCost());
-        System.out.println(Arrays.toString(bb4TSP.getPath()));
+        System.out.println(Arrays.toString(bb4TSP.getPath()));*/
 /*
         BB4TSP bb4TSP2=new BB4TSP();
         bb4TSP2.bb4TSP(b,4);

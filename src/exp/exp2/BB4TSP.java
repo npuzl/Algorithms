@@ -26,15 +26,15 @@ public class BB4TSP {
     Vector<Integer> path = null;
 
     public int[] getPath() {
+        if (path == null || path.size() == 0) {
+            System.out.println("无通路！");
+            return null;
+        }
         int[] routes = new int[path.size() + 1];
         for (int i = 0; i < path.size(); i++)
             routes[i] = path.get(i);
         routes[routes.length - 1] = path.get(0);
         return routes;
-    }
-
-    public void setMinCost(int minCost) {
-        this.minCost = minCost;
     }
 
     /**
@@ -67,7 +67,6 @@ public class BB4TSP {
                     minCity = i;
                 }
             }
-
             if (minCity != -1) {
                 sum += tempMin;
                 current.add(minCity);
@@ -88,11 +87,6 @@ public class BB4TSP {
     /**
      * 真正的上界应该用回溯法+贪心来做，
      * 比较麻烦，有时间再写，先用上面的不完备的上界
-     *
-     * @param matrix
-     * @param tempPath
-     * @param deepth
-     * @param tempLength
      */
     public void getMax(int[][] matrix, int[] tempPath, int deepth, int tempLength) {
 
@@ -114,12 +108,6 @@ public class BB4TSP {
         }
     }
 
-    private void swap(int i, int j, int[] arr) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-
     Comparator<HeapNode> cmp = new Comparator<HeapNode>() {
         @Override
         public int compare(HeapNode e1, HeapNode e2) {//从小到大排序
@@ -133,8 +121,7 @@ public class BB4TSP {
      */
     private final PriorityQueue<HeapNode> priorHeap = new PriorityQueue<HeapNode>(100, cmp);
 
-    @SuppressWarnings("rawtypes")
-    public static class HeapNode implements Comparable, Cloneable {
+    public static class HeapNode implements Cloneable {
         //堆节点
         int lcost; //子树费用的下界//优先级//就是lb//那个computeLB的lb
         int level;//0-level的城市是已经排好的//其实这也是第几层
@@ -183,26 +170,6 @@ public class BB4TSP {
             // heapNode.priorNode= (Vector<Integer>) priorNode.clone();
             return heapNode;
         }
-
-        @Override
-        public int compareTo(Object x) {//升序排列, 每一次pollFirst
-            int xu = ((HeapNode) x).lcost;
-            return Integer.compare(lcost, xu);
-        }
-
-        @Override
-        public boolean equals(Object x) {
-            if (x == null) {
-                return false;
-            }
-            if (this == x) {
-                return true;
-            }
-            if (getClass() != x.getClass()) {
-                return false;
-            }
-            return lcost == ((HeapNode) x).lcost;
-        }
     }
 
     /**
@@ -229,17 +196,17 @@ public class BB4TSP {
         //计算中间两项//对于有向图，要考虑从1出发还是回到1，
         int tempMin1 = Integer.MAX_VALUE;
         int tempMin2 = Integer.MAX_VALUE;
-        for (int j : unVisted) {
-            //从r1出发的最小值
-            if (cMatrix[visted.get(0)][j] < tempMin1 && cMatrix[visted.get(0)][j] != -1) {
-                tempMin1 = cMatrix[visted.get(0)][j];
-            }
-            //从别的地方出发回到rk的最小值
-            if (cMatrix[j][visted.get(vistedSize - 1)] != -1 && cMatrix[j][visted.get(vistedSize - 1)] < tempMin2) {
-                tempMin2 = cMatrix[j][visted.get(vistedSize - 1)];
-            }
-        }
-        long tempMin = (long) tempMin1 + (long) tempMin2;
+//        for (int j : unVisted) {
+//            //从r1出发的最小值
+//            if (cMatrix[visted.get(0)][j] < tempMin1 && cMatrix[visted.get(0)][j] != -1) {
+//                tempMin1 = cMatrix[visted.get(0)][j];
+//            }
+//            //从别的地方出发回到rk的最小值
+//            if (cMatrix[j][visted.get(vistedSize - 1)] != -1 && cMatrix[j][visted.get(vistedSize - 1)] < tempMin2) {
+//                tempMin2 = cMatrix[j][visted.get(vistedSize - 1)];
+//            }
+//        }
+//        long tempMin = (long) tempMin1 + (long) tempMin2;
         tempMin1 = Integer.MAX_VALUE;
         tempMin2 = Integer.MAX_VALUE;
         for (int j : unVisted) {
@@ -254,8 +221,10 @@ public class BB4TSP {
         }
         //前提是unvisted非空，如果为空还加，则会有问题
 
+//        if (unVisted.size() != 0)
+//            tempSum += Math.min((long) tempMin1 + (long) tempMin2, tempMin);
         if (unVisted.size() != 0)
-            tempSum += Math.min((long) tempMin1 + (long) tempMin2, tempMin);
+            tempSum += (long) tempMin1 + (long) tempMin2;
 
         //最后那个求和项目
         for (int i : unVisted) {
@@ -327,7 +296,6 @@ public class BB4TSP {
                         path = node.visted;
                     }
                 }
-
             }
             //接下来进行剪枝//删除lcost大于minCost的节点
             priorHeap.removeIf(h -> h.lcost > minCost);

@@ -18,17 +18,6 @@ public class Back4TSP {
     public int[] bestSol;// 当前最优解
     // 如果需要输出最优路线，就是bestSol[1],bestSol[2].....bestSol[n],bestSol[1]
     int n = 0; // 顶点个数
-    int count = 0;
-
-    private int getRouteLength(int[] cs) {
-        int s = 0;
-        for (int i = 1; i < cs.length - 1; i++) {
-            s += matrix[cs[i]][cs[i + 1]];
-        }
-        s += matrix[cs[cs.length - 1]][1];
-        return s;
-    }
-
     private void backtrack(int i) {// i为初始深度
         if (i > n) {
             // 当到底了
@@ -39,7 +28,7 @@ public class Back4TSP {
             for (int j = i; j <= n; j++) {
                 // 第i个位置可能是i，i+1,i+2，....，n
 
-                if (check(i, j)) {
+                if (check(i, j)) {//check能不能放，有无通路
                     swap(i, j);
                     // 如果第i个位置可以放
                     if (i < n && currentCost + matrix[currentSol[i - 1]][currentSol[i]] < bestCost) {
@@ -58,10 +47,8 @@ public class Back4TSP {
                     }
                     swap(j, i);
                 }
-
             }
         }
-
     }
 
     private void swap(int i, int j) {

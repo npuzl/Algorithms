@@ -1,20 +1,20 @@
 package exp.exp3;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class GAOperations {
 
-    private int[][] iniPop;
-    private int popNum;
-    private int length;
-    private int[][] matrix;
-    private int[] code;
-    private int codeNum;
-    private int[] codeCount;
-    private double[] fitness;
+    private final int[][] iniPop;
+    private final int popNum;
+    private final int length;
+    private final int[][] matrix;
+    private final int[] code;
+    private final int codeNum;
+    private final int[] codeCount;
+    private final double[] fitness;
     private int[] bestSol;
     private int minCost = Integer.MAX_VALUE;
+    private int generation = 0;
 
     private int factor(int a) {
         int sum = 1;
@@ -162,10 +162,87 @@ public class GAOperations {
         //扰动
     }
 
+    /**
+     * 交叉操作
+     *
+     * @param p 交叉比率，前百分之10*p不交叉，后面的交叉
+     */
+    private void cross(int p) {
+        for (int i = 0; i < iniPop.length / 2; i++) {
+            int k = new Random().nextInt(length - 1) + 1;
+            int m = new Random().nextInt(length - 1) + 1;
+            cross(iniPop[k], iniPop[m], p);
+
+        }
+    }
+
+    /**
+     * 两个数组的交叉操作
+     *
+     * @param pop1 数组1
+     * @param pop2 数组2
+     * @param p    交叉比率
+     */
+    private void cross(int[] pop1, int[] pop2, int p) {
+        int index = pop1.length * p / 10 - 1;//index及其之前的都不交叉，后面的要交叉
+        int[] temp = Arrays.copyOfRange(pop1, index + 1, pop1.length);
+        for (int i = index + 1; i < pop1.length; i++) {
+            pop1[i] = pop2[i];
+            pop2[i] = temp[i - index - 1];
+        }
+        //交叉完了，修复
+        repair(pop1, p);
+        repair(pop2, p);
+    }
+
+    /**
+     * 修复操作
+     *
+     * @param pop 要修复的数组
+     * @param p   交叉比率
+     */
+    private void repair(int[] pop, int p) {
+        int index = pop.length * p / 10 - 1;//index及其之前的都不交叉，后面的要交叉
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int k : pop) {
+            if (!map.containsKey(k)) {
+                map.put(k, 1);
+            } else {
+                map.put(k, map.get(k) + 1);
+            }
+        }
+        ArrayList<Integer> overUseList = new ArrayList<>();
+        Set<Map.Entry<Integer, Integer>> set = map.entrySet();
+        for (Map.Entry<Integer, Integer> s : set) {
+            if (s.getValue() > 1) {
+                overUseList.add(s.getKey());
+            }
+        }
+        //接下找未用到的城市
+        ArrayList<Integer> unUseList = new ArrayList<>();
+        for (int i = 1; i <= pop.length; i++) {
+            if (map.get(i) == null)
+                unUseList.add(i);
+        }
+        Collections.shuffle(unUseList);//打乱
+        //然后恢复
+
+        int j = 0;
+        for (int i = index + 1; i < pop.length; i++) {
+            if (overUseList.contains(pop[i]))
+                pop[i] = unUseList.get(j++);
+        }
+
+
+    }
+
     public void newGeneration() {
         roundBet();
+        cross(4);
         //随机交换的位置数目设置为城市数/5
         disturbance(length / 5);
+
         updateBest();
     }
 
@@ -183,7 +260,8 @@ public class GAOperations {
                 minCost = sum;
             }
         }
-        System.out.println("第" + (gen++) + "代的最优解为:" + getMinCost() + "\t最优解为:" + Arrays.toString(bestSol));
+        if (gen++ == generation)
+            System.out.println("遗传算法最优解为:" + getMinCost() + "\t路线为:" + Arrays.toString(bestSol));
 
     }
 
@@ -226,6 +304,7 @@ public class GAOperations {
     }
 
     public void getBestSol(int generation) {
+        this.generation = generation;
         randomInitialization();
         for (int i = 0; i < generation; i++)
             newGeneration();

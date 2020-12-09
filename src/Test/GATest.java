@@ -25,9 +25,14 @@ public class GATest {
 
     }
 
-    @Test
-    public void compareBack4AndGA() {
-        int cityNum = 14;
+    public static void main(String[] args) {
+        for(int i=9;i<=14;i++)
+            compareBack4AndGA(i);
+        //compareBack4AndGA(12);
+    }
+    public static void compareBack4AndGA(int n) {
+        int cityNum =n;
+        System.out.println("当城市数为"+cityNum+"时");
         int popNum = 100;
         int[] code = new int[cityNum];
         for (int i = 0; i < cityNum; i++) {
@@ -41,17 +46,17 @@ public class GATest {
         GAOperations ga = new GAOperations(popNum, matrixGA, code);
 
 
-        ga.getBestSol(10000);
+        ga.getBestSol(n*1000);
 
 
         Back4TSP back4TSP = new Back4TSP();
         back4TSP.backtrack4TSP(matrixBack4, cityNum);
-        System.out.println(back4TSP.getShortestLength());
-        System.out.println(Arrays.toString(back4TSP.getRoutedSol()));
+        System.out.print("回溯法最优解为"+back4TSP.getShortestLength());
+        System.out.println("\t路线为"+Arrays.toString(back4TSP.getRoutedSol()));
 
     }
 
-    private void generateMatrix(int[][] matrixGA, int[][] matrixBack4, int n) {
+    private static void generateMatrix(int[][] matrixGA, int[][] matrixBack4, int n) {
         Random random = new Random();
         int[][] cities = new int[n][2];
         for (int i = 0; i < n; i++) {

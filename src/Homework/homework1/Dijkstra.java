@@ -90,7 +90,7 @@ public class Dijkstra {
     }
 
     public static void main(String[] args) {
-        int n = 10;
+        int n = 10;//城市数目
         Random random = new Random();
         int[][] locals = new int[n][2];
         //生成n个城市坐标

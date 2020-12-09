@@ -29,16 +29,16 @@ public class Back4TSPTest {
                         + "\n路线为" + Arrays.toString(back4TSP.getRoutedSol()));
 */
         //Assert.assertEquals(34, back4TSP.bestc);
-
-        makeCompare(15);
+        for(int k=3;k<=15;k++)
+        makeCompare(k);
         //makeCompare(15);
         //compare();
     }
     public void makeCompare(int k) {
         int[][] matrix = generateLoads(k);
-        System.out.println("邻接矩阵为：");
-        for (int[] m : matrix)
-            System.out.println(Arrays.toString(m));
+        //System.out.println("邻接矩阵为：");
+        //for (int[] m : matrix)
+            //System.out.println(Arrays.toString(m));
 
         long start1 = System.currentTimeMillis();
         Back4TSP back4TSP = new Back4TSP();

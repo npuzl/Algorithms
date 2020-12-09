@@ -77,6 +77,6 @@ public class kthSelect<T extends Comparable> {
 
     public static void main(String[] args) {
         Integer[] list = new Integer[]{3, 8, 5, 6, 7, 4, 9, 2, 11, 0};
-        new kthSelect<Integer>(list, 12);
+        new kthSelect<Integer>(list, 1);
     }
 }
